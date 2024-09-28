@@ -1,4 +1,5 @@
-db
-sleep/.idea
-sleep/.gradle
-sleep/build
+/db/
+/sleep/.idea
+/sleep/.gradle
+/sleep/build
+/.idea/
