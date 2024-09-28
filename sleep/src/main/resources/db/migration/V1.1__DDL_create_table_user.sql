@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS "user" (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20),
+    email VARCHAR(50) UNIQUE,
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL
+);
+
