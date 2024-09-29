@@ -1,6 +1,7 @@
 package com.noom.interview.fullstack.sleep.controller
 
 import com.noom.interview.fullstack.sleep.dto.ErrorResponseDTO
+import com.noom.interview.fullstack.sleep.exception.SleepLogException
 import com.noom.interview.fullstack.sleep.exception.UserException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -26,6 +27,13 @@ class AdviceController {
     @ExceptionHandler(UserException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun userException(ex: UserException) : ResponseEntity<ErrorResponseDTO> {
+        val errorResponse = ErrorResponseDTO(ex.message, null)
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(SleepLogException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun sleepLogException(ex: SleepLogException) : ResponseEntity<ErrorResponseDTO> {
         val errorResponse = ErrorResponseDTO(ex.message, null)
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }

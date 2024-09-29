@@ -17,4 +17,11 @@ class SleepLogController(private val sleepLogService: SleepLogService) {
     ): SleepLogResponseDTO {
         return sleepLogService.createSleepLog(sleepLogRequestDTO, userId)
     }
+
+    @GetMapping("/{userId}/latest")
+    fun getLastSleepLog(
+        @PathVariable userId: Long
+    ): SleepLogResponseDTO {
+        return sleepLogService.getLastSleepLog(userId)
+    }
 }
