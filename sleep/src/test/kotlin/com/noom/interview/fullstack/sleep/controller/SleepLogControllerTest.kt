@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import java.time.LocalDateTime
+import java.time.LocalTime
 
 @ExtendWith(MockitoExtension::class)
 class SleepLogControllerTest {
@@ -46,8 +46,8 @@ class SleepLogControllerTest {
     fun `should create sleep log successfully`(){
         val userId = 1L
         val sleepLogRequestDTO = SleepLogRequestDTO(
-            timeInBedStart = LocalDateTime.now().minusHours(8),
-            timeInBedEnd = LocalDateTime.now(),
+            timeInBedStart = LocalTime.now().minusHours(8),
+            timeInBedEnd = LocalTime.now(),
             morningFeeling = MorningFeelingEnum.GOOD
         )
 
@@ -72,7 +72,7 @@ class SleepLogControllerTest {
         val userId = 1L
         val invalidRequestDTO = SleepLogRequestDTO(
             timeInBedStart = null,
-            timeInBedEnd = LocalDateTime.now(),
+            timeInBedEnd = LocalTime.now(),
             morningFeeling = MorningFeelingEnum.GOOD
         )
 
