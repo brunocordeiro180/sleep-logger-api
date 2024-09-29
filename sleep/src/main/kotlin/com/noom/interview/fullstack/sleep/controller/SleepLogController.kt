@@ -1,5 +1,6 @@
 package com.noom.interview.fullstack.sleep.controller
 
+import com.noom.interview.fullstack.sleep.dto.SleepLogAvgResponseDTO
 import com.noom.interview.fullstack.sleep.dto.SleepLogRequestDTO
 import com.noom.interview.fullstack.sleep.dto.SleepLogResponseDTO
 import com.noom.interview.fullstack.sleep.service.SleepLogService
@@ -23,5 +24,13 @@ class SleepLogController(private val sleepLogService: SleepLogService) {
         @PathVariable userId: Long
     ): SleepLogResponseDTO {
         return sleepLogService.getLastSleepLog(userId)
+    }
+
+    @GetMapping("/{userId}/average")
+    fun getSleepAverage(
+        @PathVariable userId: Long,
+        @RequestParam days: Long
+    ): SleepLogAvgResponseDTO {
+        return sleepLogService.getSleepAverage(userId, days)
     }
 }

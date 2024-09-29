@@ -1,15 +1,17 @@
 package com.noom.interview.fullstack.sleep.utils
 
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class DateUtils {
     companion object {
-        fun formatDateTimeTo12HourPeriod(dateTime: LocalDateTime?): String? {
+        fun formatTimeTo12HourPeriod(time: LocalTime?): String? {
             val formatter = getFormatter("h:mm a")
-            val timeFormated = dateTime?.format(formatter)
+            val timeFormated = time?.format(formatter)
 
             return timeFormated
         }
@@ -37,6 +39,17 @@ class DateUtils {
             val ordinalSuffix = getOrdinalSuffix(day)
 
             return "$month, $day$ordinalSuffix"
+        }
+
+        fun getDurationBetweenTimes(timeInBedStart: LocalTime?, timeInBedEnd: LocalTime?): Duration {
+            val startDateTime = LocalDateTime.of(LocalDate.now(), timeInBedStart)
+            var endDateTime = LocalDateTime.of(LocalDate.now(), timeInBedEnd)
+
+            if (timeInBedEnd?.isBefore(timeInBedStart) == true) {
+                endDateTime = endDateTime.plusDays(1)
+            }
+
+            return Duration.between(startDateTime, endDateTime)
         }
 
         private fun getFormatter(pattern : String) : DateTimeFormatter {

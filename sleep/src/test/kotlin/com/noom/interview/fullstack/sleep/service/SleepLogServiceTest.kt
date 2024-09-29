@@ -18,7 +18,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
-import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.Optional
 
 @ExtendWith(MockitoExtension::class)
@@ -39,8 +39,8 @@ class SleepLogServiceTest {
         val user = User()
 
         val sleepLogRequestDTO = SleepLogRequestDTO(
-            timeInBedStart = LocalDateTime.now().minusHours(8),
-            timeInBedEnd = LocalDateTime.now(),
+            timeInBedStart = LocalTime.now().minusHours(8),
+            timeInBedEnd = LocalTime.now(),
             morningFeeling = MorningFeelingEnum.GOOD
         )
 
@@ -52,8 +52,8 @@ class SleepLogServiceTest {
         val result: SleepLogResponseDTO = sleepLogService.createSleepLog(sleepLogRequestDTO, 1L)
 
         assertEquals(DateUtils.formatDateWithOrdinal(sleepLog.sleepDate), result.sleepDate)
-        assertEquals(DateUtils.formatDateTimeTo12HourPeriod(sleepLog.timeInBedStart), result.timeBedStart)
-        assertEquals(DateUtils.formatDateTimeTo12HourPeriod(sleepLog.timeInBedEnd), result.timeBedEnd)
+        assertEquals(DateUtils.formatTimeTo12HourPeriod(sleepLog.timeInBedStart), result.timeBedStart)
+        assertEquals(DateUtils.formatTimeTo12HourPeriod(sleepLog.timeInBedEnd), result.timeBedEnd)
         assertEquals(DateUtils.formatTimePassed(sleepLog.totalTimeInBed), result.totalTimeInBed)
         assertEquals(sleepLog.morningFeeling?.value, result.morningFeeling)
     }
@@ -61,8 +61,8 @@ class SleepLogServiceTest {
     @Test
     fun `should throw UserException when user not found`() {
         val sleepLogRequestDTO = SleepLogRequestDTO(
-            timeInBedStart = LocalDateTime.now().minusHours(8),
-            timeInBedEnd = LocalDateTime.now(),
+            timeInBedStart = LocalTime.now().minusHours(8),
+            timeInBedEnd = LocalTime.now(),
             morningFeeling = MorningFeelingEnum.GOOD
         )
 
@@ -82,8 +82,8 @@ class SleepLogServiceTest {
         val sleepLog = SleepLog(
             id = 1L,
             user = user,
-            timeInBedStart = LocalDateTime.now().minusHours(8),
-            timeInBedEnd = LocalDateTime.now(),
+            timeInBedStart = LocalTime.now().minusHours(8),
+            timeInBedEnd = LocalTime.now(),
             totalTimeInBed = 480,
             morningFeeling = MorningFeelingEnum.GOOD
         )

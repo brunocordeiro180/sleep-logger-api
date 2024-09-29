@@ -14,8 +14,8 @@ data class SleepLogResponseDTO (
         fun fromSleepLog(sleepLog: SleepLog): SleepLogResponseDTO {
             return SleepLogResponseDTO(
                 sleepDate = DateUtils.formatDateWithOrdinal(sleepLog.sleepDate),
-                timeBedStart = DateUtils.formatDateTimeTo12HourPeriod(sleepLog.timeInBedStart),
-                timeBedEnd = DateUtils.formatDateTimeTo12HourPeriod(sleepLog.timeInBedEnd),
+                timeBedStart = DateUtils.formatTimeTo12HourPeriod(sleepLog.timeInBedStart),
+                timeBedEnd = DateUtils.formatTimeTo12HourPeriod(sleepLog.timeInBedEnd),
                 totalTimeInBed = DateUtils.formatTimePassed(sleepLog.totalTimeInBed),
                 sleepLog.morningFeeling?.value
             )
