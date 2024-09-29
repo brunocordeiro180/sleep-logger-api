@@ -1,5 +1,6 @@
 package com.noom.interview.fullstack.sleep.service
 
+import com.noom.interview.fullstack.sleep.exception.UserException
 import com.noom.interview.fullstack.sleep.model.User
 import com.noom.interview.fullstack.sleep.repository.UserRepository
 import org.junit.jupiter.api.Assertions.*
@@ -25,18 +26,19 @@ class UserServiceTest{
         val user = User()
         `when`(userRepository.findById(1L)).thenReturn(Optional.of(user))
 
-        val result: Optional<User> = userService.findById(1L)
+        val result: User = userService.getUser(1L)
 
-        assertTrue(result.isPresent)
-        assertEquals(user, result.get())
+        assertNotNull(result)
     }
 
     @Test
     fun `should return empty when user not found`() {
         `when`(userRepository.findById(-1L)).thenReturn(Optional.empty())
 
-        val result: Optional<User> = userService.findById(-1L)
+        val exception = org.junit.jupiter.api.assertThrows<UserException> {
+            userService.getUser(-1L)
+        }
 
-        assertTrue(result.isEmpty)
+        assertEquals("User not found", exception.message)
     }
 }
