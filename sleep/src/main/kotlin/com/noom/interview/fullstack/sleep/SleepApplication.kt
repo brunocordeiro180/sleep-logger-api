@@ -1,7 +1,13 @@
 package com.noom.interview.fullstack.sleep
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.MessageSource
+import org.springframework.context.annotation.Bean
+import org.springframework.context.support.ReloadableResourceBundleMessageSource
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 
 @SpringBootApplication
 class SleepApplication {
@@ -12,4 +18,20 @@ class SleepApplication {
 
 fun main(args: Array<String>) {
 	runApplication<SleepApplication>(*args)
+}
+
+@Bean
+fun messageSource(): MessageSource {
+	val messageSource = ReloadableResourceBundleMessageSource()
+
+	messageSource.setBasename("classpath:messages")
+	messageSource.setDefaultEncoding("UTF-8")
+	return messageSource
+}
+
+@Bean
+fun getValidator(): LocalValidatorFactoryBean {
+	val bean = LocalValidatorFactoryBean()
+	bean.setValidationMessageSource(messageSource())
+	return bean
 }
