@@ -1,6 +1,6 @@
 package com.noom.interview.fullstack.sleep.dto
 
-import com.noom.interview.fullstack.sleep.enum.MorningFeelingEnum
+import com.noom.interview.fullstack.sleep.enums.MorningFeelingEnum
 import java.time.LocalTime
 import javax.validation.constraints.NotNull
 

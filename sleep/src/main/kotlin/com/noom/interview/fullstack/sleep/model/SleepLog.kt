@@ -1,7 +1,7 @@
 package com.noom.interview.fullstack.sleep.model
 
 import com.noom.interview.fullstack.sleep.dto.SleepLogRequestDTO
-import com.noom.interview.fullstack.sleep.enum.MorningFeelingEnum
+import com.noom.interview.fullstack.sleep.enums.MorningFeelingEnum
 import com.noom.interview.fullstack.sleep.utils.DateUtils
 import java.time.LocalDate
 import java.time.LocalTime

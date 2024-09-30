@@ -3,18 +3,21 @@ package com.noom.interview.fullstack.sleep.controller;
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.noom.interview.fullstack.sleep.dto.SleepLogAvgResponseDTO
 import com.noom.interview.fullstack.sleep.dto.SleepLogRequestDTO
 import com.noom.interview.fullstack.sleep.dto.SleepLogResponseDTO
-import com.noom.interview.fullstack.sleep.enum.MorningFeelingEnum
+import com.noom.interview.fullstack.sleep.enums.MorningFeelingEnum
 import com.noom.interview.fullstack.sleep.exception.SleepLogException
 import com.noom.interview.fullstack.sleep.service.SleepLogService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
+import org.mockito.kotlin.any
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -59,7 +62,7 @@ class SleepLogControllerTest {
             morningFeeling = "GOOD"
         )
 
-        `when`(sleepLogService.createSleepLog(sleepLogRequestDTO, userId)).thenReturn(expectedResponse)
+        whenever(sleepLogService.createSleepLog(any(), anyLong())).thenReturn(expectedResponse)
 
         mockMvc.perform(MockMvcRequestBuilders.post("/sleep-log/$userId")
             .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +97,7 @@ class SleepLogControllerTest {
             morningFeeling = "GOOD"
         )
 
-        `when`(sleepLogService.getLastSleepLog(userId)).thenReturn(expectedResponse)
+        whenever(sleepLogService.getLastSleepLog(anyLong())).thenReturn(expectedResponse)
 
         mockMvc.perform(MockMvcRequestBuilders.get("/sleep-log/$userId/latest")
             .contentType(MediaType.APPLICATION_JSON))
@@ -105,10 +108,33 @@ class SleepLogControllerTest {
     fun `should return 400 when the last sleep log was not found`() {
         val userId = 1L
 
-        `when`(sleepLogService.getLastSleepLog(userId)).thenThrow(SleepLogException("No sleep logs found!"))
+        whenever(sleepLogService.getLastSleepLog(anyLong())).thenThrow(SleepLogException("No sleep logs found!"))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/sleep-log/$userId/latest")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `should return sleep averages successfully`() {
+        val userId = 1L
+        val days = 30L
+
+        // Mocked response from service layer
+        val sleepLogAvgResponseDTO = SleepLogAvgResponseDTO(
+            startDate = "August, 1st",
+            endDate = "August, 30th",
+            avgTimeInBedStart = "10:00 PM",
+            avgTimeInBedEnd = "6:30 AM",
+            avgTotalTime = "8 h 30 m",
+            morningFeelings = mapOf("GOOD" to 15, "OK" to 10, "BAD" to 5) as HashMap<String, Int>
+        )
+
+        whenever(sleepLogService.getSleepAverage(anyLong(), anyLong())).thenReturn(sleepLogAvgResponseDTO)
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/sleep-log/$userId/average")
+            .param("days", days.toString())
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk)
     }
 }
