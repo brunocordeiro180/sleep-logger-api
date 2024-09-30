@@ -1,4 +1,6 @@
-![plot](./resources/wireframes.png)
+<p align="center">
+    <img src="./resources/wireframes.png">
+</p>
 
 <p align="center">
     <h1 align="center">SLEEP-LOOGER-API</h1>
