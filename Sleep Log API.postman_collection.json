@@ -1,0 +1,112 @@
+{
+	"info": {
+		"_postman_id": "da923a87-297b-425b-8f50-a083259e6fb4",
+		"name": "Sleep Log API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10181015",
+		"_collection_link": "https://restless-flare-727723.postman.co/workspace/Pyyne~a395c05f-2315-4a39-aea7-a2903a239e56/collection/10181015-da923a87-297b-425b-8f50-a083259e6fb4?action=share&source=collection_link&creator=10181015"
+	},
+	"item": [
+		{
+			"name": "Create Sleep Log",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeInBedStart\": \"21:00\",\n    \"timeInBedEnd\": \"03:45\",\n    \"morningFeeling\": \"BAD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/sleep-log/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sleep-log",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Last Sleep",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeBedStart\": \"2024-09-27T22:30:00\",\n    \"timeBedEnd\": \"2024-09-28T06:30:00\",\n    \"morningFeeling\": \"GOOD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/sleep-log/1/latest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sleep-log",
+						"1",
+						"latest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sleep Average",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeBedStart\": \"2024-09-27T22:30:00\",\n    \"timeBedEnd\": \"2024-09-28T06:30:00\",\n    \"morningFeeling\": \"GOOD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/sleep-log/1/average?days=30",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sleep-log",
+						"1",
+						"average"
+					],
+					"query": [
+						{
+							"key": "days",
+							"value": "30"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

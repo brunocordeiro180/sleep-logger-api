@@ -8,6 +8,8 @@ import com.noom.interview.fullstack.sleep.exception.SleepLogException
 import com.noom.interview.fullstack.sleep.model.SleepLog
 import com.noom.interview.fullstack.sleep.repository.SleepLogRepository
 import com.noom.interview.fullstack.sleep.utils.DateUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
@@ -17,13 +19,16 @@ class SleepLogService(
     private val sleepLogRepository: SleepLogRepository,
     private val userService: UserService
 ) {
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     fun createSleepLog(sleepLogRequestDTO: SleepLogRequestDTO, userId: Long) : SleepLogResponseDTO{
+        logger.info("-- Creating sleep log request for user $userId --")
         val user = userService.getUser(userId)
 
         var sleepLog = SleepLog.fromDTO(sleepLogRequestDTO, user)
         sleepLog = sleepLogRepository.save(sleepLog)
 
+        logger.info("-- Sleep log saved for user $userId --")
         return SleepLogResponseDTO.fromSleepLog(sleepLog)
     }
 
@@ -39,6 +44,7 @@ class SleepLogService(
     }
 
     fun getSleepAverage(userId: Long, days: Long) : SleepLogAvgResponseDTO {
+        logger.info("-- Getting sleep average for user $userId --")
         val user = userService.getUser(userId)
         val sleepLogList = sleepLogRepository.findByUserAndSleepDateAfterOrderBySleepDate(user, LocalDate.now().minusDays(days))
         val sleepLogListSize = sleepLogList.size
@@ -48,7 +54,7 @@ class SleepLogService(
         var timeInBedStartTotal = 0
         var timeInBedEndTotal = 0
         var totalTimeInBedSum = 0L
-        var mapMorningFeelings = HashMap<String, Int> ()
+        val mapMorningFeelings = HashMap<String, Int> ()
 
         MorningFeelingEnum.values().forEach { feeling ->
             mapMorningFeelings[feeling.value] = 0
@@ -78,8 +84,8 @@ class SleepLogService(
                 mapMorningFeelings[feeling.value] = (mapMorningFeelings[feeling.value] ?: 0) + 1
             }
         }
-
-       return SleepLogAvgResponseDTO(
+        logger.info("-- Average of sleeps calculated for user $userId --")
+        return SleepLogAvgResponseDTO(
             startDate = DateUtils.formatDateWithOrdinal(sleepLogList[0].sleepDate),
             endDate = DateUtils.formatDateWithOrdinal(sleepLogList[sleepLogListSize - 1].sleepDate),
             avgTimeInBedStart = DateUtils.formatTimeTo12HourPeriod(avgTimeInBedStart),
@@ -101,6 +107,7 @@ class SleepLogService(
         if (days < 15) {
             throw SleepLogException("Minimum interval for average is 15 days")
         }
+        logger.info("--- Validation passed for avg calculation ---")
     }
 
 }
