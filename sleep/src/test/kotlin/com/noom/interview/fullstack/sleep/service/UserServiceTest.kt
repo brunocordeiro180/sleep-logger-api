@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
+import org.mockito.Mockito.anyLong
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.whenever
 import java.util.*
 
 @ExtendWith(MockitoExtension::class)
@@ -24,7 +26,7 @@ class UserServiceTest{
     @Test
     fun `should return user when found`() {
         val user = User()
-        `when`(userRepository.findById(1L)).thenReturn(Optional.of(user))
+        whenever(userRepository.findById(anyLong())).thenReturn(Optional.of(user))
 
         val result: User = userService.getUser(1L)
 
@@ -33,7 +35,7 @@ class UserServiceTest{
 
     @Test
     fun `should return empty when user not found`() {
-        `when`(userRepository.findById(-1L)).thenReturn(Optional.empty())
+        whenever(userRepository.findById(anyLong())).thenReturn(Optional.empty())
 
         val exception = org.junit.jupiter.api.assertThrows<UserException> {
             userService.getUser(-1L)

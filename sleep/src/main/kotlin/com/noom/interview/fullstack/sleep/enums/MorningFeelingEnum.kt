@@ -1,4 +1,4 @@
-package com.noom.interview.fullstack.sleep.enum
+package com.noom.interview.fullstack.sleep.enums;
 
 enum class MorningFeelingEnum(val value : String) {
     BAD("Bad"),
