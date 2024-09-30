@@ -16,12 +16,12 @@
 
 #####  Table of Contents
 
-- [ Overview](#-overview)
-- [ Repository Structure](#-repository-structure)
-- [ Features](#-features)
-- [ Getting Started](#-getting-started)
-    - [ How to Run](#-how-to-run)
-    - [ Tests](#-tests)
+- [ Overview](#overview)
+- [ Repository Structure](#repository-structure)
+- [ Features](#features)
+- [ Getting Started](#getting-started)
+    - [ How to Run](#how-to-run)
+    - [ Tests](#tests)
 
 ---
 
