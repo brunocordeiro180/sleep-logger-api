@@ -3,15 +3,15 @@
 </p>
 
 <p align="center">
-    <h1 align="center">SLEEP-LOOGER-API</h1>
+    <h1 align="center">SLEEP-LOGGER-API</h1>
 </p>
 <p align="center">
     <em><code>❯ Service designed to track and retrieve historical sleep data for users </code></em>
 </p>
 <p align="center">
-	<img src="https://img.shields.io/github/last-commit/brunocordeiro180/sleep-looger-api?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/brunocordeiro180/sleep-looger-api?style=default&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/brunocordeiro180/sleep-looger-api?style=default&color=0080ff" alt="repo-language-count">
+	<img src="https://img.shields.io/github/last-commit/brunocordeiro180/sleep-logger-api?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
+	<img src="https://img.shields.io/github/languages/top/brunocordeiro180/sleep-logger-api?style=default&color=0080ff" alt="repo-top-language">
+	<img src="https://img.shields.io/github/languages/count/brunocordeiro180/sleep-logger-api?style=default&color=0080ff" alt="repo-language-count">
 </p>
 
 <br>
@@ -36,7 +36,7 @@ The Sleep Log Application is a backend service designed to track and analyze sle
 ##  Repository Structure
 
 ```sh
-└── sleep-looger-api/
+└── sleep-logger-api/
     ├── challenge_requirements.docx
     ├── docker-compose.yml
     ├── resources
@@ -84,3 +84,14 @@ Execute the test suite using the following command:
 ```sh
 ❯ gradle test
 ```
+
+##  Considerations
+
+This API simulates the register considering that a person won't sleep more than 14 hours and that a person can go to sleep and wakeup in the same day. Also the migrations are not in separated env folders (dev, hml, prd) since it is a take home challenge
+
+## Next Steps
+
+- Change user_id to be an UUID
+- Add annotations for validation
+- Integration tests
+- Change migrations to a enviroment folder

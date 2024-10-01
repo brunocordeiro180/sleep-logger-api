@@ -41,15 +41,8 @@ class DateUtils {
             return "$month, $day$ordinalSuffix"
         }
 
-        fun getDurationBetweenTimes(timeInBedStart: LocalTime?, timeInBedEnd: LocalTime?): Duration {
-            val startDateTime = LocalDateTime.of(LocalDate.now(), timeInBedStart)
-            var endDateTime = LocalDateTime.of(LocalDate.now(), timeInBedEnd)
-
-            if (timeInBedEnd?.isBefore(timeInBedStart) == true) {
-                endDateTime = endDateTime.plusDays(1)
-            }
-
-            return Duration.between(startDateTime, endDateTime)
+        fun getDurationBetweenTimes(timeInBedStart: LocalDateTime?, timeInBedEnd: LocalDateTime?): Duration {
+            return Duration.between(timeInBedStart, timeInBedEnd)
         }
 
         private fun getFormatter(pattern : String) : DateTimeFormatter {

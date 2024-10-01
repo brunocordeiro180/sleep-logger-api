@@ -1,9 +1,8 @@
 package com.noom.interview.fullstack.sleep.service
 
-import com.noom.interview.fullstack.sleep.dto.SleepLogAvgResponseDTO
-import com.noom.interview.fullstack.sleep.dto.SleepLogRequestDTO
-import com.noom.interview.fullstack.sleep.dto.SleepLogResponseDTO
-import com.noom.interview.fullstack.sleep.enums.MorningFeelingEnum
+import com.noom.interview.fullstack.sleep.dto.response.SleepLogAvgResponseDTO
+import com.noom.interview.fullstack.sleep.dto.request.SleepLogRequestDTO
+import com.noom.interview.fullstack.sleep.dto.response.SleepLogResponseDTO
 import com.noom.interview.fullstack.sleep.exception.SleepLogException
 import com.noom.interview.fullstack.sleep.model.SleepLog
 import com.noom.interview.fullstack.sleep.repository.SleepLogRepository
@@ -11,6 +10,7 @@ import com.noom.interview.fullstack.sleep.utils.DateUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -21,10 +21,11 @@ class SleepLogService(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-    fun createSleepLog(sleepLogRequestDTO: SleepLogRequestDTO, userId: Long) : SleepLogResponseDTO{
+    fun createSleepLog(sleepLogRequestDTO: SleepLogRequestDTO, userId: Long) : SleepLogResponseDTO {
         logger.info("-- Creating sleep log request for user $userId --")
         val user = userService.getUser(userId)
 
+        validateSleepLog(sleepLogRequestDTO);
         var sleepLog = SleepLog.fromDTO(sleepLogRequestDTO, user)
         sleepLog = sleepLogRepository.save(sleepLog)
 
@@ -56,22 +57,18 @@ class SleepLogService(
         var totalTimeInBedSum = 0L
         val mapMorningFeelings = HashMap<String, Int> ()
 
-        MorningFeelingEnum.values().forEach { feeling ->
-            mapMorningFeelings[feeling.value] = 0
-        }
-
         var avgTimeInBedStart : LocalTime? = null
         var avgTimeInBedEnd : LocalTime? = null
         var avgIntervals : Long = 0
 
 
         for(sleepLog in sleepLogList){
-            val timeInBedStartSeconds = sleepLog.timeInBedStart?.toSecondOfDay()
-            val timeInBedEndSeconds = sleepLog.timeInBedEnd?.toSecondOfDay()
+            val timeInBedStartSeconds = sleepLog.timeInBedStart.toSecondOfDay()
+            val timeInBedEndSeconds = sleepLog.timeInBedEnd.toSecondOfDay()
 
-            timeInBedStartTotal += (timeInBedStartSeconds ?: 0)
-            timeInBedEndTotal += (timeInBedEndSeconds ?: 0)
-            totalTimeInBedSum += (sleepLog.totalTimeInBed)
+            timeInBedStartTotal += timeInBedStartSeconds
+            timeInBedEndTotal += timeInBedEndSeconds
+            totalTimeInBedSum += sleepLog.totalTimeInBed
 
             val avgStartSeconds = ((timeInBedStartTotal / sleepLogListSize).toLong())
             val avgEndSeconds = ((timeInBedEndTotal / sleepLogListSize).toLong())
@@ -108,6 +105,31 @@ class SleepLogService(
             throw SleepLogException("Minimum interval for average is 15 days")
         }
         logger.info("--- Validation passed for avg calculation ---")
+    }
+
+    fun validateSleepLog(sleepLogRequestDTO: SleepLogRequestDTO) {
+        val timeInBedEnd = sleepLogRequestDTO.timeInBedEnd
+        val timeInBedStart = sleepLogRequestDTO.timeInBedStart
+        val sleepLogForToday = sleepLogRepository.findFirstBySleepDate(timeInBedEnd.toLocalDate())
+
+        if (timeInBedEnd.toLocalDate() != LocalDate.now()){
+            throw SleepLogException("The date of timeInBedEnd must correspond with today's date")
+        }
+
+        if(sleepLogForToday.isPresent){
+            throw SleepLogException("There is already a sleep log for today")
+        }
+
+        if (timeInBedStart.isAfter(timeInBedEnd)
+            || timeInBedStart.isEqual(timeInBedEnd)) {
+            throw SleepLogException("The timeBedEnd should be after the timeInBedStart")
+        }
+
+        if (Duration.between(timeInBedStart, timeInBedEnd).toHours() > 14){
+            throw SleepLogException("The maximum amount of hours in bed that can be registered is 14 hours")
+        }
+
+        logger.info("--- Validation passed for sleep log creation ---")
     }
 
 }

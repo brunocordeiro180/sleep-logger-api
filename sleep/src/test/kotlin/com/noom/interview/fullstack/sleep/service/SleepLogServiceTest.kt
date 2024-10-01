@@ -1,6 +1,6 @@
 package com.noom.interview.fullstack.sleep.service
 
-import com.noom.interview.fullstack.sleep.dto.SleepLogRequestDTO
+import com.noom.interview.fullstack.sleep.dto.request.SleepLogRequestDTO
 import com.noom.interview.fullstack.sleep.enums.MorningFeelingEnum
 import com.noom.interview.fullstack.sleep.exception.SleepLogException
 import com.noom.interview.fullstack.sleep.exception.UserException
@@ -19,6 +19,7 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.Optional
 
@@ -40,9 +41,9 @@ class SleepLogServiceTest {
         val user = User()
 
         val sleepLogRequestDTO = SleepLogRequestDTO(
-            LocalTime.now().minusHours(8),
-            LocalTime.now(),
-            MorningFeelingEnum.GOOD
+            LocalDateTime.now().minusHours(8),
+            LocalDateTime.now(),
+            MorningFeelingEnum.GOOD.name
         )
 
         val sleepLog = SleepLog.fromDTO(sleepLogRequestDTO, user)
@@ -62,9 +63,9 @@ class SleepLogServiceTest {
     @Test
     fun `should throw UserException when user not found`() {
         val sleepLogRequestDTO = SleepLogRequestDTO(
-            LocalTime.now().minusHours(8),
-            LocalTime.now(),
-            MorningFeelingEnum.GOOD
+            LocalDateTime.now().minusHours(8),
+            LocalDateTime.now(),
+            MorningFeelingEnum.GOOD.name
         )
 
         whenever(userService.getUser(1L)).thenThrow(UserException("User not found"))
