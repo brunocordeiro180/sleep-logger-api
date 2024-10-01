@@ -9,4 +9,5 @@ import java.util.*
 interface SleepLogRepository : JpaRepository<SleepLog, Long> {
     fun findFirstByUserOrderByIdDesc(user: User) : Optional<SleepLog>
     fun findByUserAndSleepDateAfterOrderBySleepDate(user: User, sleepDate: LocalDate) : List<SleepLog>
+    fun findFirstBySleepDate(sleepDate: LocalDate) : Optional<SleepLog>
 }

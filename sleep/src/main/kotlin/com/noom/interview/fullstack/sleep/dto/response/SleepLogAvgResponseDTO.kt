@@ -1,4 +1,4 @@
-package com.noom.interview.fullstack.sleep.dto
+package com.noom.interview.fullstack.sleep.dto.response
 
 data class SleepLogAvgResponseDTO (
 

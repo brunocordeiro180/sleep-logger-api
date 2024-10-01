@@ -1,4 +1,4 @@
-package com.noom.interview.fullstack.sleep.dto
+package com.noom.interview.fullstack.sleep.dto.response
 
 import com.noom.interview.fullstack.sleep.model.SleepLog
 import com.noom.interview.fullstack.sleep.utils.DateUtils

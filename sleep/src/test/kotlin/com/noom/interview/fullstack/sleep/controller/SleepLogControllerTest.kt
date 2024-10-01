@@ -3,9 +3,9 @@ package com.noom.interview.fullstack.sleep.controller;
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.noom.interview.fullstack.sleep.dto.SleepLogAvgResponseDTO
-import com.noom.interview.fullstack.sleep.dto.SleepLogRequestDTO
-import com.noom.interview.fullstack.sleep.dto.SleepLogResponseDTO
+import com.noom.interview.fullstack.sleep.dto.response.SleepLogAvgResponseDTO
+import com.noom.interview.fullstack.sleep.dto.request.SleepLogRequestDTO
+import com.noom.interview.fullstack.sleep.dto.response.SleepLogResponseDTO
 import com.noom.interview.fullstack.sleep.enums.MorningFeelingEnum
 import com.noom.interview.fullstack.sleep.exception.SleepLogException
 import com.noom.interview.fullstack.sleep.service.SleepLogService
@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 @ExtendWith(MockitoExtension::class)
@@ -49,9 +50,9 @@ class SleepLogControllerTest {
     fun `should create sleep log successfully`(){
         val userId = 1L
         val sleepLogRequestDTO = SleepLogRequestDTO(
-            timeInBedStart = LocalTime.now().minusHours(8),
-            timeInBedEnd = LocalTime.now(),
-            morningFeeling = MorningFeelingEnum.GOOD
+            timeInBedStart = LocalDateTime.now().minusHours(8),
+            timeInBedEnd = LocalDateTime.now(),
+            morningFeeling = MorningFeelingEnum.GOOD.name
         )
 
         val expectedResponse = SleepLogResponseDTO(
@@ -73,15 +74,10 @@ class SleepLogControllerTest {
     @Test
     fun `should return 400 when input is invalid`() {
         val userId = 1L
-        val invalidRequestDTO = SleepLogRequestDTO(
-            timeInBedStart = null,
-            timeInBedEnd = LocalTime.now(),
-            morningFeeling = MorningFeelingEnum.GOOD
-        )
 
         mockMvc.perform(MockMvcRequestBuilders.post("/sleep-log/$userId")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(invalidRequestDTO)))
+            .content("{\"timeInBedStart\" : null,\"timeInBedEnd\": null, \"morningFeeling\": \"BAD\"}"))
             .andExpect(status().isBadRequest)
     }
 

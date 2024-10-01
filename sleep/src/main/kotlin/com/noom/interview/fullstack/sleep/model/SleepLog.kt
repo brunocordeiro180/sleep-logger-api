@@ -1,6 +1,6 @@
 package com.noom.interview.fullstack.sleep.model
 
-import com.noom.interview.fullstack.sleep.dto.SleepLogRequestDTO
+import com.noom.interview.fullstack.sleep.dto.request.SleepLogRequestDTO
 import com.noom.interview.fullstack.sleep.enums.MorningFeelingEnum
 import com.noom.interview.fullstack.sleep.utils.DateUtils
 import java.time.LocalDate
@@ -23,10 +23,10 @@ data class SleepLog (
     val sleepDate: LocalDate = LocalDate.now(),
 
     @Column(name = "time_in_bed_start", nullable = false)
-    val timeInBedStart: LocalTime?,
+    val timeInBedStart: LocalTime,
 
     @Column(name = "time_in_bed_end", nullable = false)
-    val timeInBedEnd: LocalTime?,
+    val timeInBedEnd: LocalTime,
 
     @Column(name = "total_time_in_bed", nullable = false)
     val totalTimeInBed: Long,
@@ -40,10 +40,10 @@ data class SleepLog (
         fun fromDTO(sleepLogRequestDTO: SleepLogRequestDTO, user: User): SleepLog {
             return SleepLog(
                 user = user,
-                timeInBedStart = sleepLogRequestDTO.timeInBedStart,
-                timeInBedEnd = sleepLogRequestDTO.timeInBedEnd,
+                timeInBedStart = sleepLogRequestDTO.timeInBedStart.toLocalTime(),
+                timeInBedEnd = sleepLogRequestDTO.timeInBedEnd.toLocalTime(),
                 totalTimeInBed = DateUtils.getDurationBetweenTimes(sleepLogRequestDTO.timeInBedStart, sleepLogRequestDTO.timeInBedEnd).toMinutes(),
-                morningFeeling = sleepLogRequestDTO.morningFeeling
+                morningFeeling = MorningFeelingEnum.fromValue(sleepLogRequestDTO.morningFeeling)
             )
         }
     }
